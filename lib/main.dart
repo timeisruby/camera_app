@@ -22,11 +22,11 @@ class MyApp extends StatelessWidget {
       title: "Picture",
       initialRoute: "/",
       routes: {
-        '/':(context)=> HomeScreen(), // 이동 화면
-        '/sw':(context)=> SWPlayGround(), // 개발 화면
-        '/hj':(context)=> HJPlayGround(), // 개발 화면
+        '/': (context) => HomeScreen(), // 이동 화면
+        '/sw': (context) => SWPlayGround(), // 개발 화면
+        '/hj': (context) => HJPlayGround(), // 개발 화면
         // 추후 프러턱트 주소가 -> '/' 변경 예정
-        '/product':(context)=> CameraScreen(), // 실제 프러덕트 화면
+        '/product': (context) => CameraScreen(), // 실제 프러덕트 화면
       },
     );
   }
