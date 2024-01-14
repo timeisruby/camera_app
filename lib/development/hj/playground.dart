@@ -2,41 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
 class HJPlayGround extends StatefulWidget {
-  final List<CameraDescription> cameras;
-  const HJPlayGround({Key? key, required this.cameras}) : super(key: key);
+  const HJPlayGround({Key? key}) : super(key: key);
   @override
   State<HJPlayGround> createState() => _HJPlayGroundState();
 }
 
 class _HJPlayGroundState extends State<HJPlayGround> {
-  late List<CameraDescription> cameras = [];
+  late List<CameraDescription> cameras;
   late CameraController cameraController;
-  late Future<void> cameraValue;
 
   int direction = 0;
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.cameras.isNotEmpty) {
-      startCamera(direction);
-    }
+    startCamera(direction);
   }
 
   void startCamera(int direction) async {
-    try {
-      cameraController =
-          CameraController(widget.cameras[direction], ResolutionPreset.high);
-      await cameraController.initialize();
-      setState(() {});
-    } catch (e) {
-      print("Failed to initialize camera: $e");
-    }
+    cameras = await availableCameras();
+    cameraController = CameraController(
+      cameras[direction],
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
 
-    if (mounted) {
-      setState(() {});
-    }
+    await cameraController.initialize().then((value) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {}); //To refresh widget
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   @override
@@ -76,12 +74,6 @@ class _HJPlayGroundState extends State<HJPlayGround> {
             ),
             Align(
               alignment: AlignmentDirectional.topCenter,
-              child: Text(
-                "My Camera",
-                style: TextStyle(
-                  fontSize: 30,
-                ),
-              ),
             ),
           ],
         ),
